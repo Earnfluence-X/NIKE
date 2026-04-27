@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>NIKE | SNKRS — The Drop Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      transition: background-color 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      overflow-x: hidden;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #ff5e1a, #ffaa44);
+      z-index: 1000;
+      transition: width 0.1s ease-out;
+    }
+
+    .nike-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      padding: 0.8rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nike-logo { display: flex; align-items: center; gap: 0.5rem; }
+    .nike-swoosh { width: 60px; height: auto; }
+    .logo-text { font-weight: 800; font-size: 1rem; letter-spacing: 1px; color: white; }
+    .header-links { display: flex; gap: 2rem; }
+    .header-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: 0.2s; }
+    .header-links a:hover { color: #ff5e1a; }
+    @media (max-width: 700px) { .header-links { display: none; } .nike-header { padding: 0.8rem 1rem; } .nike-swoosh { width: 50px; } }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.03) 0%, transparent 70%);
+      animation: ambientBreath 8s ease-in-out infinite;
+    }
+    @keyframes ambientBreath { 0% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.02); } 100% { opacity: 0.3; transform: scale(1); } }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; position: relative; z-index: 2; }
+    .hero { display: flex; flex-direction: row; min-height: 85vh; gap: 3rem; align-items: center; }
+    .text-panel { flex: 1; color: white; padding: 2rem; }
+    .nike-badge { font-size: 0.7rem; letter-spacing: 4px; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem; opacity: 0.8; color: #ff5e1a; }
+    h1 { font-size: 4rem; font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .variant-sub { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; opacity: 0.85; border-left: 3px solid #ff5e1a; padding-left: 1rem; }
+
+    .drop-timer-section { background: rgba(255,94,26,0.15); backdrop-filter: blur(8px); border-radius: 20px; padding: 1rem 1.2rem; margin: 1rem 0; border: 1px solid rgba(255,94,26,0.4); }
+    .drop-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: #ffaa80; margin-bottom: 0.3rem; }
+    .timer { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .timer-block { text-align: center; }
+    .timer-number { font-size: 2rem; font-weight: 800; background: rgba(0,0,0,0.5); padding: 0.3rem 0.6rem; border-radius: 12px; min-width: 70px; display: inline-block; }
+    .timer-label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.7; margin-top: 0.2rem; display: block; }
+
+    .tabs-container { margin: 1.5rem 0; }
+    .tabs-header { display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 1rem; }
+    .tab-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 600; padding: 0.6rem 0; cursor: pointer; transition: 0.2s; position: relative; }
+    .tab-btn.active { color: #ff5e1a; }
+    .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: #ff5e1a; }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .desc-text { font-size: 0.9rem; line-height: 1.5; opacity: 0.9; }
+    .notes-list { list-style: none; padding: 0; margin-top: 0.8rem; }
+    .notes-list li { font-size: 0.8rem; padding: 0.3rem 0; display: flex; align-items: center; gap: 0.5rem; opacity: 0.85; }
+    .notes-list li::before { content: "✓"; color: #ff5e1a; font-weight: bold; }
+
+    .stats-row { display: flex; gap: 2rem; margin: 1rem 0; flex-wrap: wrap; }
+    .stat { display: flex; flex-direction: column; }
+    .stat-number { font-size: 1.4rem; font-weight: 800; }
+    .stat-label { font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.7; }
+    .tag-wall { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1rem 0; }
+    .pill { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); padding: 0.4rem 1rem; border-radius: 40px; font-size: 0.7rem; font-weight: 500; }
+    .progress-badge { margin-top: 1rem; font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.4); display: inline-block; padding: 0.3rem 1rem; border-radius: 30px; width: fit-content; }
+
+    .shoe-panel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .shoe-image-wrapper { width: 100%; max-width: 500px; animation: floatShoe 3s ease-in-out infinite; }
+    .shoe-image { width: 100%; object-fit: contain; filter: drop-shadow(0 25px 20px rgba(0,0,0,0.4)); transition: opacity 0.3s ease; }
+    @keyframes floatShoe { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
+    .shoe-name-label { text-align: center; margin-top: 1.5rem; font-weight: 800; font-size: 1.2rem; background: rgba(0,0,0,0.6); padding: 0.5rem 1.5rem; border-radius: 60px; backdrop-filter: blur(12px); border: 1px solid #ff5e1a; color: white; display: inline-block; }
+
+    .section-title { font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .section-title span { background: #ff5e1a20; padding: 0.2rem 0.6rem; border-radius: 40px; font-size: 0.7rem; }
+
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1rem; }
+    .gallery-item { aspect-ratio: 1/1; border-radius: 20px; overflow: hidden; background: #1a1a1a; border: 1px solid rgba(255,100,0,0.2); transition: 0.3s; }
+    .gallery-item:hover { transform: scale(1.02); border-color: #ff5e1a; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-caption { text-align: center; font-size: 0.7rem; opacity: 0.7; margin-top: 0.5rem; }
+
+    /* 🔴🔴🔴 FIXED STYLE INSPIRATION CARDS - LARGER, NO CROPPING 🔴🔴🔴 */
+    .inspo-grid { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 1.5rem; 
+      margin-top: 1rem; 
+    }
+    .inspo-card { 
+      background: rgba(0,0,0,0.5); 
+      backdrop-filter: blur(8px); 
+      border-radius: 24px; 
+      padding: 1.2rem; 
+      border: 1px solid rgba(255,100,0,0.25); 
+      transition: 0.3s; 
+      text-align: center; 
+    }
+    .inspo-card:hover { 
+      transform: translateY(-6px); 
+      border-color: #ff5e1a; 
+      background: rgba(0,0,0,0.6);
+    }
+    /* KEY FIX: No cropping - proper aspect ratio */
+    .inspo-image { 
+      width: 100%; 
+      height: auto; 
+      aspect-ratio: 16 / 11; 
+      object-fit: contain; 
+      border-radius: 16px; 
+      margin-bottom: 0.8rem; 
+      background: #1a1a1a;
+    }
+    .inspo-title { 
+      font-weight: 700; 
+      font-size: 1rem; 
+      margin-bottom: 0.3rem; 
+      letter-spacing: -0.2px;
+    }
+    .inspo-desc { 
+      font-size: 0.8rem; 
+      opacity: 0.7; 
+      line-height: 1.4;
+    }
+
+    .scratch-card {
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      border-radius: 28px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border: 2px dashed rgba(255,94,26,0.5);
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .scratch-card:hover { border-color: #ff5e1a; transform: scale(1.01); }
+    .scratch-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: #ffaa80; margin-bottom: 0.5rem; }
+    .scratch-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .scratch-sub { font-size: 0.8rem; opacity: 0.7; margin-bottom: 1.5rem; }
+    .gift-code { background: rgba(0,0,0,0.6); padding: 1rem; border-radius: 20px; font-family: monospace; font-size: 2rem; font-weight: 800; letter-spacing: 4px; color: #ffaa44; display: inline-block; margin-top: 0.5rem; }
+    .scratch-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(45deg, #888 0px, #888 2px, #aaa 2px, #aaa 4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+      transition: 0.4s;
+      cursor: pointer;
+    }
+    .scratch-overlay span { background: black; padding: 0.5rem 1.5rem; border-radius: 60px; font-weight: 800; font-size: 1rem; }
+    .scratch-card.revealed .scratch-overlay { opacity: 0; visibility: hidden; }
+    .scratch-card.revealed { background: linear-gradient(135deg, #1a2a1a, #0d1a0d); border: 2px solid #ffaa44; }
+
+    .recommendations-section { margin: 2rem 0; }
+    .rec-scroll { display: flex; gap: 1.2rem; overflow-x: auto; scroll-behavior: smooth; padding: 0.5rem 0 1rem; scrollbar-width: thin; }
+    .rec-scroll::-webkit-scrollbar { height: 4px; }
+    .rec-scroll::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
+    .rec-scroll::-webkit-scrollbar-thumb { background: #ff5e1a; border-radius: 10px; }
+    .rec-card { min-width: 220px; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); border-radius: 20px; padding: 1rem; border: 1px solid rgba(255,100,0,0.2); transition: 0.3s; text-align: center; }
+    .rec-card:hover { transform: translateY(-5px); border-color: #ff5e1a; }
+    .rec-img { width: 100%; height: 140px; object-fit: contain; margin-bottom: 0.8rem; }
+    .rec-title { font-weight: 700; font-size: 0.9rem; }
+    .rec-sub { font-size: 0.7rem; opacity: 0.6; margin-top: 0.2rem; }
+
+    .cinematic-section { display: flex; flex-wrap: wrap; gap: 2rem; margin: 2rem 0 3rem; }
+    .cinematic-card { flex: 1; min-width: 280px; border-radius: 32px; overflow: hidden; border: 1px solid rgba(255,100,0,0.3); background: #0a0a0a; transition: transform 0.3s; }
+    .cinematic-card:hover { transform: scale(1.02); }
+    .cinematic-img { width: 100%; max-height: 420px; object-fit: cover; display: block; }
+    .cinematic-caption { text-align: center; padding: 1rem; background: #0a0a0a; color: #ffaa80; font-weight: 600; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      font-size: 1.5rem;
+      color: white;
+      border: 1px solid #ff5e1a;
+      transition: 0.2s;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .back-to-top.show { opacity: 1; visibility: visible; }
+    .back-to-top:hover { background: #ff5e1a; transform: scale(1.05); }
+
+    .nav-dots { position: fixed; right: 2rem; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1rem; z-index: 100; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: 0.2s; }
+    .dot.active { width: 32px; border-radius: 12px; background: #ff5e1a; }
+    .next-arrow, .prev-arrow { position: fixed; bottom: 2rem; background: rgba(0,0,0,0.7); backdrop-filter: blur(12px); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; font-size: 2rem; color: white; border: 1px solid #ff5e1a; transition: 0.2s; }
+    .next-arrow { right: 2rem; }
+    .prev-arrow { right: 6rem; }
+    .next-arrow:hover, .prev-arrow:hover { background: #ff5e1a; transform: scale(1.05); }
+
+    @media (max-width: 900px) {
+      .container { padding: 1rem; }
+      .hero { flex-direction: column; }
+      .text-panel { text-align: center; padding: 1rem; }
+      .timer { justify-content: center; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .inspo-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .rec-scroll { gap: 0.8rem; }
+      h1 { font-size: 2.5rem; }
+      .nav-dots { flex-direction: row; top: auto; bottom: 80px; right: auto; left: 50%; transform: translateX(-50%); }
+      .next-arrow { bottom: 1rem; right: 1rem; }
+      .prev-arrow { bottom: 1rem; right: 5rem; }
+      .back-to-top { bottom: 1rem; left: 1rem; }
+    }
+  </style>
+</head>
+<body id="appBody">
+
+<div class="nike-header">
+  <div class="header-container">
+    <div class="nike-logo">
+      <svg class="nike-swoosh" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21.8 4.2c-1.8 1.3-8.5 6-11.8 8.4-2.6 1.9-4.2 2.8-5.5 2.8-1.3 0-2.1-0.8-2.1-2 0-1.2 0.6-2.4 1.8-3.6 1.1-1.1 2.8-2.1 5-3 1.7-0.7 5-1.7 9.8-3.1 0.3-0.1 0.5-0.2 0.7-0.3 0.2-0.1 0.4-0.2 0.5-0.2 0.1 0 0.2 0 0.2 0.1 0.1 0.1 0.1 0.2 0.1 0.4 0 0.1 0 0.3-0.1 0.4-0.1 0.2-0.2 0.3-0.3 0.5-0.1 0.1-0.3 0.3-0.5 0.5-0.2 0.2-0.4 0.3-0.6 0.5z"/>
+      </svg>
+      <span class="logo-text">SNKRS</span>
+    </div>
+    <div class="header-links">
+      <a href="#">Drops</a>
+      <a href="#">Archive</a>
+      <a href="#">Members</a>
+      <a href="#">Stories</a>
+    </div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container">
+  <div class="hero">
+    <div class="text-panel">
+      <div class="nike-badge" id="brandBadge">NIKE // JORDAN</div>
+      <h1 id="mainTitle">Air Jordans</h1>
+      <div class="variant-sub" id="subTitle">Nike Jordan 1 Mid Trainers</div>
+      
+      <div class="drop-timer-section">
+        <div class="drop-label">🚀 NEXT DROP</div>
+        <div class="timer">
+          <div class="timer-block"><span class="timer-number" id="timerDays">00</span><span class="timer-label">DAYS</span></div>
+          <div class="timer-block"><span class="timer-number" id="timerHours">00</span><span class="timer-label">HOURS</span></div>
+          <div class="timer-block"><span class="timer-number" id="timerMinutes">00</span><span class="timer-label">MINUTES</span></div>
+          <div class="timer-block"><span class="timer-number" id="timerSeconds">00</span><span class="timer-label">SECONDS</span></div>
+        </div>
+      </div>
+
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="details">📋 PRODUCT DETAILS</button>
+          <button class="tab-btn" data-tab="behind">🎨 BEHIND THE DESIGN</button>
+        </div>
+        <div class="tab-content active" id="tabDetails">
+          <div class="desc-text" id="description"></div>
+          <ul class="notes-list" id="notesList"></ul>
+        </div>
+        <div class="tab-content" id="tabBehind">
+          <div class="desc-text" id="behindText"></div>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><span class="stat-number" id="likesNum">11.4K</span><span class="stat-label">LIKES</span></div>
+        <div class="stat"><span class="stat-number" id="commentsNum">71</span><span class="stat-label">COMMENTS</span></div>
+        <div class="stat"><span class="stat-number" id="sharesNum">1,421</span><span class="stat-label">SHARES</span></div>
+        <div class="stat"><span class="stat-number" id="savesNum">740</span><span class="stat-label">SAVES</span></div>
+      </div>
+      
+      <div class="tag-wall">
+        <span class="pill">#SNKRS</span><span class="pill">#TheDrop</span><span class="pill">#ComingSoon</span>
+        <span class="pill">#NikeMember</span><span class="pill">TXG | Creation</span><span class="pill">Tag @friend 😍</span>
+      </div>
+      <div class="progress-badge" id="progressText">94% Downloading...</div>
+    </div>
+
+    <div class="shoe-panel">
+      <div class="shoe-image-wrapper">
+        <img class="shoe-image" id="shoeImage" src="" alt="Nike Shoe">
+      </div>
+      <div class="shoe-name-label" id="variantLabel">Air Jordan 1 Retro</div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY GALLERY -->
+  <div class="community-gallery">
+    <div class="section-title">📸 COMMUNITY GALLERY <span>#WornByYou</span></div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="community-1.jpg" alt="Community 1" onerror="this.src='https://images.unsplash.com/photo-1539185441755-769473a23570?w=300&h=300&fit=crop'"></div>
+      <div class="gallery-item"><img src="community-2.jpg" alt="Community 2" onerror="this.src='https://images.unsplash.com/photo-1562183241-b937e95585b6?w=300&h=300&fit=crop'"></div>
+      <div class="gallery-item"><img src="community-3.jpg" alt="Community 3" onerror="this.src='https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=300&h=300&fit=crop'"></div>
+      <div class="gallery-item"><img src="community-4.jpg" alt="Community 4" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop'"></div>
+    </div>
+    <div class="gallery-caption">Tag @Nike to be featured • 1,284 posts this week</div>
+  </div>
+
+  <!-- STYLE INSPIRATION - LARGER CARDS, NO CROPPING -->
+  <div class="style-inspo">
+    <div class="section-title">👔 STYLE INSPIRATION <span>How to wear</span></div>
+    <div class="inspo-grid" id="inspoGrid"></div>
+  </div>
+
+  <div class="scratch-card" id="scratchCard">
+    <div class="scratch-overlay" id="scratchOverlay">
+      <span>✨ SCRATCH HERE ✨</span>
+    </div>
+    <div class="scratch-label">🎁 LIMITED OFFER</div>
+    <div class="scratch-title">Exclusive Gift Code</div>
+    <div class="scratch-sub">Scratch to reveal your surprise</div>
+    <div class="gift-code" id="giftCode">••••••••</div>
+  </div>
+
+  <!-- YOU MAY ALSO LIKE -->
+  <div class="recommendations-section">
+    <div class="section-title">🔥 YOU MAY ALSO LIKE <span>Other Drops</span></div>
+    <div class="rec-scroll" id="recScroll"></div>
+  </div>
+
+  <!-- CINEMATIC IMAGES -->
+  <div class="cinematic-section">
+    <div class="cinematic-card">
+      <img class="cinematic-img" id="cinemaImg1" src="sb1.jpg" alt="Skateboarder POV" onerror="this.src='https://placehold.co/800x500/333/ff5e1a?text=Add+Skate+Image'">
+      <div class="cinematic-caption">🔥 NIKE SB // POV: From below — complete control 🔥</div>
+    </div>
+    <div class="cinematic-card">
+      <img class="cinematic-img" id="cinemaImg2" src="sb2.jpg" alt="Skate action" onerror="this.src='https://placehold.co/800x500/333/ff5e1a?text=Add+Skate+Image'">
+      <div class="cinematic-caption">⚡ NIKE SB // Street elevation // Skate culture ⚡</div>
+    </div>
+  </div>
+</div>
+
+<div class="back-to-top" id="backToTop">↑</div>
+<div class="nav-dots" id="navDots"></div>
+<div class="prev-arrow" id="prevArrow">←</div>
+<div class="next-arrow" id="nextArrow">→</div>
+
+<script>
+  const giftCodes = ["SNKRS25", "EARLY40", "DROP30", "SNKRSWEEK", "MEMBER10", "FAST15", "EXCLUSIVE20", "SNKRSGIFT", "NIKE50", "THEDROP", "FIRSTLOOK", "ACCESS24"];
+  function getRandomGiftCode() { return giftCodes[Math.floor(Math.random() * giftCodes.length)]; }
+
+  // YOU MAY ALSO LIKE IMAGES (replace with your file names)
+  const recommendations = [
+    { image: "psb.jpg", title: "Air Max 95", subtitle: "Neon Revival" },
+    { image: "3dn.jpg", title: "Jordan 11", subtitle: "Concord" },
+    { image: "3dnike.jpg", title: "Nike Foamposite", subtitle: "Royal" },
+    { image: "3dnike2.jpg", title: "Dunk Low", subtitle: "Panda" }
+  ];
+
+  // 🔴🔴🔴 STYLE INSPIRATION - 21 IMAGES (REPLACE WITH YOUR FILE NAMES) 🔴🔴🔴
+  const styleInspirations = {
+    "Air Jordans": [
+      { image: "baggydenim.jpg", title: "Baggy Denim", desc: "Relaxed fit jeans + cropped hoodie" },
+      { image: "wool.jpg", title: "Varsity Jacket", desc: "Classic wool sleeve jacket" },
+      { image: "cargo.jpg", title: "Street Prep", desc: "Cargo pants + oversized tee" }
+    ],
+    "Nike SB Dunk": [
+      { image: "cargo.jpg", title: "Skater Core", desc: "Cargo pants + graphic tee" },
+      { image: "socks.jpg", title: "Cropped Trousers", desc: "Visible socks + loose fit" },
+      { image: "flannel.jpg", title: "Layering", desc: "Flannel over hoodie" }
+    ],
+    "Air Max 90": [
+      { image: "teachwear.jpg", title: "Techwear", desc: "Utility vest + tapered joggers" },
+      { image: "track.jpg", title: "Retro Sport", desc: "Track pants + windbreaker" },
+      { image: "cuffed denim.jpg", title: "Clean Casual", desc: "Cuffed denim + plain tee" }
+    ],
+    "Air Force 1": [
+      { image: "monochrome.jpg", title: "All White", desc: "Monochrome fit + silver chain" },
+      { image: "baggy.jpg", title: "Oversized", desc: "Wide leg pants + cropped top" },
+      { image: "long coat.jpg", title: "Layered", desc: "Long coat + chunky socks" }
+    ],
+    "Jordan 4 Retro": [
+      { image: "hoops.jpg", title: "Hoops Culture", desc: "Basketball jersey + joggers" },
+      { image: "cargo.jpg", title: "Cargo Style", desc: "Olive cargos + neutral tee" },
+      { image: "tracksuit.jpg", title: "Street Icon", desc: "Matching tracksuit" }
+    ],
+    "Nike Dunk High": [
+      { image: "baggy.jpg", title: "90s Vibe", desc: "High-waisted jeans + crop top" },
+      { image: "varsity.png", title: "College Core", desc: "Varsity sweater + chinos" },
+      { image: "beanie.jpg", title: "Skate Style", desc: "Corduroy pants + beanie" }
+    ],
+    "Nike SB Zoom": [
+      { image: "white.jpg", title: "Minimalist", desc: "Black jeans + white tee" },
+      { image: "statement.jpg", title: "Sock Game", desc: "Statement socks + shorts" },
+      { image: "denim.jpg", title: "Light Layers", desc: "Denim jacket + hoodie" }
+    ]
+  };
+
+  function getRandomDropTime() {
+    const now = Date.now();
+    return now + (2 * 60 * 60 * 1000) + Math.random() * (14 * 24 * 60 * 60 * 1000);
+  }
+
+  // 🔴🔴🔴 7 SHOE VARIANTS (REPLACE WITH YOUR FILE NAMES) 🔴🔴🔴
+  const variants = [
+    { title: "Air Jordans", sub: "Jordan 1 Retro High OG 'Chicago'", details: "The iconic Chicago colorway that started it all. Originally released in 1985, featuring premium leather and Nike Air cushioning.", behind: "Tinker Hatfield drew inspiration from Michael Jordan's gravitational pull on the court.", notes: ["Premium genuine leather", "Perforated toe box", "Nike Air technology"], bg: "#C41E3A", shoeImg: "red.png", likes: "14.2M", comments: "89K", shares: "1.8M", saves: "1.2M", variantName: "AJ1 Chicago", dropTimestamp: getRandomDropTime() },
+    { title: "Nike SB Dunk", sub: "SB Dunk Low 'Polaroid'", details: "Born from skate culture, built to withstand the rigors of skateboarding with bold color-blocking.", behind: "Inspired by instant photography, capturing the raw energy of skateboarding.", notes: ["Suede/leather upper", "Zoom Air heel", "Padded tongue"], bg: "#6A0DAD", shoeImg: "purple.png", likes: "12.1M", comments: "112K", shares: "2.3M", saves: "890K", variantName: "SB Dunk Polaroid", dropTimestamp: getRandomDropTime() },
+    { title: "Air Max 90", sub: "Air Max 90 'Infrared'", details: "Revolutionized sneaker design with visible Air cushioning. The iconic Infrared colorway remains highly sought-after.", behind: "Designer Tinker Hatfield wanted to make Air visible to the world.", notes: ["Visible Max Air", "Leather/mesh upper", "Waffle outsole"], bg: "#FF5E00", shoeImg: "orange.png", likes: "9.8M", comments: "54K", shares: "1.2M", saves: "598K", variantName: "Air Max 90 Infrared", dropTimestamp: getRandomDropTime() },
+    { title: "Air Force 1", sub: "Air Force 1 '07 Triple White", details: "The court classic that transcends basketball. Timeless style with premium leather construction.", behind: "Originally the first basketball shoe to feature Nike Air, saved by three Baltimore retailers.", notes: ["Full-grain leather", "Perforated toe box", "Encapsulated Air-Sole"], bg: "#2E86AB", shoeImg: "lb.png", likes: "18.3M", comments: "203K", shares: "3.1M", saves: "1.5M", variantName: "AF1 White", dropTimestamp: getRandomDropTime() },
+    { title: "Jordan 4 Retro", sub: "Jordan 4 'Military Black'", details: "Combines heritage basketball design with modern streetwear appeal. Premium leather and visible Air cushioning.", behind: "Tinker Hatfield introduced plastic wing eyelets inspired by fighter jet harnesses.", notes: ["Leather/synthetic upper", "Plastic wing eyelets", "Visible Air-Sole"], bg: "#4A7C59", shoeImg: "green.png", likes: "15.7M", comments: "143K", shares: "2.8M", saves: "1.2M", variantName: "Jordan 4 Military", dropTimestamp: getRandomDropTime() },
+    { title: "Nike Dunk High", sub: "Dunk High 'Syracuse'", details: "Pays homage to college basketball heritage with bold color blocking and high-top silhouette.", behind: "Created for college basketball programs as part of the 'Be True To Your School' campaign.", notes: ["Full leather upper", "High-top silhouette", "Foam midsole"], bg: "#E85D04", shoeImg: "orange2.png", likes: "10.5M", comments: "78K", shares: "1.6M", saves: "732K", variantName: "Dunk High Syracuse", dropTimestamp: getRandomDropTime() },
+    { title: "Nike SB Zoom", sub: "SB Zoom Stefan Janoski", details: "Designed with professional skateboarder Stefan Janoski. Low-profile with exceptional board feel.", behind: "Stefan Janoski wanted a skate shoe that felt like barefoot control. A minimalist masterpiece.", notes: ["Vulcanized construction", "Zoom Air heel", "Minimalist upper"], bg: "#264653", shoeImg: "blue.png", likes: "8.9M", comments: "62K", shares: "988K", saves: "432K", variantName: "SB Zoom Janoski", dropTimestamp: getRandomDropTime() }
+  ];
+
+  const cinemaImg1 = document.getElementById('sb1.jpg');
+  const cinemaImg2 = document.getElementById('sb2.jpg');
+  // Cinematic images already have src in HTML, no need to set here
+
+  let currentIndex = 0;
+  let progressVal = 94;
+  let autoInterval;
+  let timerInterval;
+
+  function loadRecommendations() {
+    const recScroll = document.getElementById('recScroll');
+    recScroll.innerHTML = '';
+    recommendations.forEach(rec => {
+      const card = document.createElement('div');
+      card.className = 'rec-card';
+      card.innerHTML = `<img class="rec-img" src="${rec.image}" alt="${rec.title}" onerror="this.src='https://placehold.co/200x140/333/ff5e1a?text=Add+Image'"><div class="rec-title">${rec.title}</div><div class="rec-sub">${rec.subtitle}</div>`;
+      recScroll.appendChild(card);
+    });
+  }
+
+  function updateNotes(notesArray) {
+    const notesList = document.getElementById('notesList');
+    notesList.innerHTML = '';
+    notesArray.forEach(note => {
+      const li = document.createElement('li');
+      li.textContent = note;
+      notesList.appendChild(li);
+    });
+  }
+
+  function updateStyleInspiration(title) {
+    const styles = styleInspirations[title] || styleInspirations["Air Jordans"];
+    const inspoGrid = document.getElementById('inspoGrid');
+    inspoGrid.innerHTML = '';
+    styles.forEach(style => {
+      const card = document.createElement('div');
+      card.className = 'inspo-card';
+      card.innerHTML = `<img class="inspo-image" src="${style.image}" alt="${style.title}" onerror="this.src='https://placehold.co/400x280/333/ff5e1a?text=Add+Style+Image'"><div class="inspo-title">${style.title}</div><div class="inspo-desc">${style.desc}</div>`;
+      inspoGrid.appendChild(card);
+    });
+  }
+
+  function updateTimer() {
+    const v = variants[currentIndex];
+    if (!v) return;
+    let timeLeft = v.dropTimestamp - Date.now();
+    if (timeLeft <= 0) {
+      v.dropTimestamp = getRandomDropTime();
+      timeLeft = v.dropTimestamp - Date.now();
+    }
+    document.getElementById('timerDays').textContent = String(Math.floor(timeLeft / (1000*60*60*24))).padStart(2,'0');
+    document.getElementById('timerHours').textContent = String(Math.floor((timeLeft % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
+    document.getElementById('timerMinutes').textContent = String(Math.floor((timeLeft % (1000*60*60)) / (1000*60))).padStart(2,'0');
+    document.getElementById('timerSeconds').textContent = String(Math.floor((timeLeft % (1000*60)) / 1000)).padStart(2,'0');
+  }
+
+  const tabDetails = document.getElementById('tabDetails');
+  const tabBehind = document.getElementById('tabBehind');
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (tabId === 'details') { tabDetails.classList.add('active'); tabBehind.classList.remove('active'); }
+      else { tabDetails.classList.remove('active'); tabBehind.classList.add('active'); }
+    });
+  });
+
+  function updateVariant(index) {
+    const v = variants[index];
+    if (!v) return;
+    const shoeImage = document.getElementById('shoeImage');
+    shoeImage.style.opacity = '0';
+    setTimeout(() => {
+      document.body.style.backgroundColor = v.bg;
+      document.getElementById('mainTitle').innerText = v.title;
+      document.getElementById('subTitle').innerText = v.sub;
+      document.getElementById('description').innerText = v.details;
+      document.getElementById('behindText').innerText = v.behind;
+      updateNotes(v.notes);
+      updateStyleInspiration(v.title);
+      document.getElementById('likesNum').innerText = v.likes;
+      document.getElementById('commentsNum').innerText = v.comments;
+      document.getElementById('sharesNum').innerText = v.shares;
+      document.getElementById('savesNum').innerText = v.saves;
+      document.getElementById('brandBadge').innerText = `NIKE // ${v.title.split(' ')[0].toUpperCase()}`;
+      document.getElementById('variantLabel').innerText = v.variantName;
+      shoeImage.src = v.shoeImg;
+      shoeImage.onerror = function() { this.src = 'https://placehold.co/500x500/333/ff5e1a?text=Add+Shoe+Image'; };
+      shoeImage.style.opacity = '1';
+      document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === index));
+      if (timerInterval) clearInterval(timerInterval);
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    }, 150);
+  }
+
+  function nextVariant() { currentIndex = (currentIndex + 1) % variants.length; updateVariant(currentIndex); resetAutoRotate(); }
+  function prevVariant() { currentIndex = (currentIndex - 1 + variants.length) % variants.length; updateVariant(currentIndex); resetAutoRotate(); }
+  function resetAutoRotate() { if (autoInterval) clearInterval(autoInterval); autoInterval = setInterval(nextVariant, 10000); }
+
+  document.getElementById('scratchOverlay').addEventListener('click', () => {
+    const newCode = getRandomGiftCode();
+    document.getElementById('giftCode').innerText = newCode;
+    document.getElementById('scratchCard').classList.add('revealed');
+  });
+
+  window.addEventListener('scroll', () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progressBar').style.width = (winScroll / height) * 100 + '%';
+    const backToTop = document.getElementById('backToTop');
+    backToTop.classList.toggle('show', winScroll > 300);
+  });
+  document.getElementById('backToTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  setInterval(() => { progressVal = (progressVal + 1) % 100; if (progressVal === 0) progressVal = 1; document.getElementById('progressText').innerText = `${progressVal}% Downloading...`; }, 1200);
+
+  function createDots() {
+    const container = document.getElementById('navDots');
+    container.innerHTML = '';
+    variants.forEach((_, idx) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (idx === currentIndex) dot.classList.add('active');
+      dot.addEventListener('click', () => { currentIndex = idx; updateVariant(currentIndex); resetAutoRotate(); });
+      container.appendChild(dot);
+    });
+  }
+
+  document.getElementById('nextArrow').addEventListener('click', nextVariant);
+  document.getElementById('prevArrow').addEventListener('click', prevVariant);
+  window.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') nextVariant(); if (e.key === 'ArrowLeft') prevVariant(); });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', (e) => { const touchEndX = e.changedTouches[0].screenX; if (touchEndX < touchStartX - 50) nextVariant(); if (touchEndX > touchStartX + 50) prevVariant(); });
+
+  createDots();
+  loadRecommendations();
+  updateVariant(0);
+  resetAutoRotate();
+  console.log("✅ Style cards are now LARGER with NO CROPPING (using contain + aspect ratio)");
+</script>
+</body>
+</html>
